@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GameHeader } from "@/components/game/GameHeader";
 import { ScoreBoard } from "@/components/game/ScoreBoard";
 import { GameStatus } from "@/components/game/GameStatus";
 import { GameBoard } from "@/components/game/GameBoard";
 import { GameControls } from "@/components/game/GameControls";
+import { GameOverModal } from "@/components/game/GameOverModal";
 import { useTicTacToe } from "@/lib/game/useTicTacToe";
 
 export default function TicTacToePage() {
@@ -27,11 +28,24 @@ export default function TicTacToePage() {
     setPlayerSymbol,
   } = useTicTacToe();
 
+  const [isGameOverModalOpen, setIsGameOverModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (winner !== null) {
+      const timer = setTimeout(() => {
+        setIsGameOverModalOpen(true);
+      }, 400);
+      return () => clearTimeout(timer);
+    } else {
+      setIsGameOverModalOpen(false);
+    }
+  }, [winner]);
+
   const isGameInProgress = board.some((cell) => cell !== null) && winner === null;
 
   return (
-    <main className="max-w-md mx-auto min-h-screen py-8 px-4 flex flex-col justify-between items-center gap-6">
-      {/* Header with Title, AI Badge, Rules & Theme Toggle */}
+    <main className="max-w-md mx-auto min-h-screen py-8 px-4 flex flex-col items-center gap-6">
+      {/* Header with Title, Rules & Theme Toggle */}
       <GameHeader />
 
       {/* Main Game Container */}
@@ -66,7 +80,7 @@ export default function TicTacToePage() {
           onCellClick={makeMove}
         />
 
-        {/* Controls: Difficulty, Player Symbol, New Game, Reset */}
+        {/* Controls: Difficulty, Player Symbol, Mid-Match Restart */}
         <GameControls
           difficulty={difficulty}
           playerSymbol={playerSymbol}
@@ -79,23 +93,23 @@ export default function TicTacToePage() {
         />
       </div>
 
-      {/* Footer with Tech Stack Pills */}
-      <footer className="w-full text-center py-2">
-        <div className="flex items-center justify-center gap-2 flex-wrap text-xs text-muted-foreground">
-          <span className="px-2.5 py-0.5 rounded-full bg-secondary/80 border border-border/60">
-            React 19
-          </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-secondary/80 border border-border/60">
-            Next.js 15
-          </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-secondary/80 border border-border/60">
-            Tailwind
-          </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-secondary/80 border border-border/60">
-            Vercel
-          </span>
-        </div>
-      </footer>
+      {/* Game Over Dialog */}
+      <GameOverModal
+        isOpen={isGameOverModalOpen}
+        winner={winner}
+        playerSymbol={playerSymbol}
+        scores={scores}
+        onPlayAgain={() => {
+          resetGame();
+          setIsGameOverModalOpen(false);
+        }}
+        onResetScores={() => {
+          resetScores();
+          resetGame();
+          setIsGameOverModalOpen(false);
+        }}
+        onClose={() => setIsGameOverModalOpen(false)}
+      />
     </main>
   );
 }
