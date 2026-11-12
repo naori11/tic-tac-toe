@@ -22,19 +22,23 @@ A modern, responsive, and unbeatable Tic-Tac-Toe web application built with **Ne
   - Clean real-time board reset and state transition when switching marks mid-game.
 - **🎨 Dark & Light Theme Modes:**
   - Integrated with `next-themes` and a flash-free script tag.
-  - Specially tuned color palettes: emerald/cyan for X, rose/coral for O, with high-contrast board surfaces and ambient glows.
+  - Quiet, refined aesthetic with balanced contrast, subtle border hierarchy, and clean typography without distracting neon effects or cluttered badges.
+- **🏆 Post-Game Result Modal (`GameOverModal`):**
+  - Instant outcome dialog displaying victory, defeat, or draw states when a match concludes.
+  - Contextual actions: "Play Again" to immediately deal a new round, and "Reset Scores" to reset all statistics.
+  - Accessible modal dialog semantics with backdrop blur and keyboard navigation.
 - **💾 Local Storage Scoreboard:**
   - Automatically records Player Wins, AI Wins, and Draws.
   - Persists across browser refreshes and tab closures.
   - Includes a one-click "Reset Scores" action.
 - **✨ Tactile UI & Micro-Interactions:**
   - Cell hover ghost preview reflecting current turn.
-  - Pop-in spring animations when markers are placed.
-  - Pulsing highlight along the winning line.
-  - Confetti burst on player victory powered by `canvas-confetti`.
+  - Crisp, restrained animations when markers are placed.
+  - Elegant highlight along the winning line.
+  - Celebratory confetti burst on player victory powered by `canvas-confetti`.
 - **♿ Accessibility & Performance:**
   - Fully navigable using keyboard tabs and Enter/Space controls.
-  - ARIA attributes (`aria-label`, `role="grid"`, `aria-live="polite"` status announcer).
+  - ARIA attributes (`aria-label`, `role="grid"`, `aria-live="polite"` status announcer, `role="dialog"` modal).
   - 100% static prerendered output for sub-millisecond edge delivery.
 
 ---
@@ -67,7 +71,8 @@ tictactoe/
 │       ├── Cell.tsx         # Individual button cell with touch targets & ARIA tags
 │       ├── GameBoard.tsx    # 3x3 interactive board with preview markers & win highlights
 │       ├── GameControls.tsx # Difficulty tabs, mark selector, new game & reset actions
-│       ├── GameHeader.tsx   # Game title bar with AI badge, rules modal & ThemeToggle
+│       ├── GameHeader.tsx   # Clean game title bar with rules modal & ThemeToggle
+│       ├── GameOverModal.tsx# Post-game outcome dialog with Play Again & Reset Scores actions
 │       ├── GameStatus.tsx   # Turn indicator, winner announcer & AI thinking status
 │       └── ScoreBoard.tsx   # Live stats display (Player, Draws, AI) with SSR hydration protection
 ├── lib/
@@ -81,7 +86,8 @@ tictactoe/
     ├── ai.test.ts           # Comprehensive AI heuristics & Minimax invariant tests (26 tests)
     ├── components.test.tsx  # React component rendering & interaction tests (26 tests)
     ├── engine.test.ts       # Board game logic, winning permutations, draws (24 tests)
-    ├── page.test.tsx        # Top-level Page integration tests (4 tests)
+    ├── gameOverModal.test.tsx # GameOverModal outcome announcement & action tests (12 tests)
+    ├── page.test.tsx        # Top-level Page integration tests (7 tests)
     ├── useTicTacToe.test.ts # State machine, AI turn scheduling, score updates (16 tests)
     └── utils.test.ts        # Helper utilities tests (2 tests)
 ```
@@ -191,7 +197,7 @@ All quality gates pass cleanly:
 
 | Gate | Tool | Status |
 | --- | --- | --- |
-| **Unit & Integration Tests** | Vitest 2.1 | `98 passed (6 test suites)` |
+| **Unit & Integration Tests** | Vitest 2.1 | `113 passed (7 test suites)` |
 | **Code Quality & Lint** | ESLint 8 / Next Core Web Vitals | `0 errors / 0 warnings` |
 | **Type Integrity** | TypeScript 5.7 | `0 errors (tsc --noEmit)` |
 | **Production Build** | Next.js 15 (Turbopack/Webpack) | `Optimized static export` |
