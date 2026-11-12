@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { HelpCircle, Sparkles, X } from "lucide-react";
+import { HelpCircle, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 
@@ -32,22 +32,11 @@ export function GameHeader({ className }: GameHeaderProps) {
         className
       )}
     >
-      {/* Brand Title & Badge */}
+      {/* Brand Title */}
       <div className="flex items-center gap-2.5">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-foreground via-foreground to-muted-foreground bg-clip-text">
-              Tic-Tac-Toe
-            </h1>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 shadow-2xs">
-              <Sparkles className="h-2.5 w-2.5 text-primary" />
-              AI Edition
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground hidden sm:block">
-            Modern, tactical & unbeatable AI
-          </p>
-        </div>
+        <h1 className="text-xl font-bold tracking-tight text-foreground">
+          Tic-Tac-Toe
+        </h1>
       </div>
 
       {/* Header Actions: Rules & Theme Toggle */}

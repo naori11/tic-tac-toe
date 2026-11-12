@@ -41,19 +41,19 @@ export function Cell({
         !isClickable && !isWinning && "cursor-not-allowed",
         isWinning &&
           value === "X" &&
-          "ring-2 ring-emerald-500/90 bg-emerald-500/15 shadow-[0_0_24px_rgba(16,185,129,0.45)] animate-pulse",
+          "ring-1 ring-emerald-500/60 bg-emerald-500/10",
         isWinning &&
           value === "O" &&
-          "ring-2 ring-rose-500/90 bg-rose-500/15 shadow-[0_0_24px_rgba(244,63,94,0.45)] animate-pulse",
+          "ring-1 ring-rose-500/60 bg-rose-500/10",
         isWinning &&
           !value &&
-          "ring-2 ring-primary/80 bg-primary/10 shadow-lg animate-pulse"
+          "ring-1 ring-primary/60 bg-primary/10"
       )}
     >
       {/* Existing Mark */}
       {value === "X" && (
         <X
-          className="h-12 w-12 sm:h-16 sm:w-16 text-emerald-500 dark:text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.6)] animate-in zoom-in-75 duration-150"
+          className="h-12 w-12 sm:h-16 sm:w-16 text-emerald-600 dark:text-emerald-400 animate-in zoom-in-75 duration-150"
           strokeWidth={2.75}
           aria-hidden="true"
         />
@@ -61,7 +61,7 @@ export function Cell({
 
       {value === "O" && (
         <Circle
-          className="h-11 w-11 sm:h-15 sm:w-15 text-rose-500 dark:text-rose-400 drop-shadow-[0_0_12px_rgba(244,63,94,0.6)] animate-in zoom-in-75 duration-150"
+          className="h-11 w-11 sm:h-15 sm:w-15 text-rose-600 dark:text-rose-400 animate-in zoom-in-75 duration-150"
           strokeWidth={2.75}
           aria-hidden="true"
         />
@@ -75,12 +75,12 @@ export function Cell({
         >
           {previewSymbol === "X" ? (
             <X
-              className="h-10 w-10 sm:h-14 sm:w-14 text-emerald-500 dark:text-emerald-400"
+              className="h-10 w-10 sm:h-14 sm:w-14 text-emerald-600 dark:text-emerald-400"
               strokeWidth={2.5}
             />
           ) : (
             <Circle
-              className="h-9 w-9 sm:h-13 sm:w-13 text-rose-500 dark:text-rose-400"
+              className="h-9 w-9 sm:h-13 sm:w-13 text-rose-600 dark:text-rose-400"
               strokeWidth={2.5}
             />
           )}

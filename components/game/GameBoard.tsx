@@ -72,7 +72,7 @@ export function GameBoard({
       className={cn(
         "relative mx-auto w-full max-w-sm sm:max-w-md",
         "rounded-3xl border border-border/80 bg-card/60 p-3.5 sm:p-5",
-        "backdrop-blur-md shadow-xl",
+        "backdrop-blur-md shadow-sm",
         className
       )}
     >

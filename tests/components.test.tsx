@@ -73,9 +73,9 @@ describe("UI Components & Primitives", () => {
       expect(handleClick).toHaveBeenCalledWith(0);
     });
 
-    it("renders marked 'X' cell and disables click", () => {
+    it("renders marked 'X' cell without neon drop shadows and disables click", () => {
       const handleClick = vi.fn();
-      render(
+      const { container } = render(
         <Cell
           index={4}
           value="X"
@@ -87,13 +87,17 @@ describe("UI Components & Primitives", () => {
       expect(cell.getAttribute("aria-label")).toBe("Cell 5: X");
       expect(cell.disabled).toBe(true);
 
+      const svg = container.querySelector("svg");
+      expect(svg?.getAttribute("class")).toContain("text-emerald-600");
+      expect(svg?.getAttribute("class")).not.toContain("drop-shadow");
+
       fireEvent.click(cell);
       expect(handleClick).not.toHaveBeenCalled();
     });
 
-    it("renders marked 'O' cell and disables click", () => {
+    it("renders marked 'O' cell without neon drop shadows and disables click", () => {
       const handleClick = vi.fn();
-      render(
+      const { container } = render(
         <Cell
           index={2}
           value="O"
@@ -104,9 +108,13 @@ describe("UI Components & Primitives", () => {
       const cell = screen.getByTestId("cell-2") as HTMLButtonElement;
       expect(cell.getAttribute("aria-label")).toBe("Cell 3: O");
       expect(cell.disabled).toBe(true);
+
+      const svg = container.querySelector("svg");
+      expect(svg?.getAttribute("class")).toContain("text-rose-600");
+      expect(svg?.getAttribute("class")).not.toContain("drop-shadow");
     });
 
-    it("applies winning highlight styling when isWinning is true", () => {
+    it("applies winning highlight styling when isWinning is true without bloom", () => {
       const { rerender } = render(
         <Cell
           index={1}
@@ -118,6 +126,8 @@ describe("UI Components & Primitives", () => {
 
       let cell = screen.getByTestId("cell-1");
       expect(cell.className).toContain("ring-emerald-500");
+      expect(cell.className).not.toContain("animate-pulse");
+      expect(cell.className).not.toContain("shadow-[0_0_24px");
 
       rerender(
         <Cell
@@ -129,6 +139,8 @@ describe("UI Components & Primitives", () => {
       );
       cell = screen.getByTestId("cell-1");
       expect(cell.className).toContain("ring-rose-500");
+      expect(cell.className).not.toContain("animate-pulse");
+      expect(cell.className).not.toContain("shadow-[0_0_24px");
     });
   });
 
@@ -308,9 +320,8 @@ describe("UI Components & Primitives", () => {
       expect(handleSymbol).not.toHaveBeenCalled();
     });
 
-    it("triggers onNewGame and onResetScores when clicked", () => {
+    it("triggers onNewGame via restart match icon button and omits old action row", () => {
       const handleNewGame = vi.fn();
-      const handleResetScores = vi.fn();
       render(
         <GameControls
           difficulty="medium"
@@ -318,15 +329,17 @@ describe("UI Components & Primitives", () => {
           playerSymbol="X"
           onPlayerSymbolChange={() => {}}
           onNewGame={handleNewGame}
-          onResetScores={handleResetScores}
         />
       );
 
-      fireEvent.click(screen.getByRole("button", { name: /start new game/i }));
+      const restartButton = screen.getByRole("button", { name: /restart match/i });
+      expect(restartButton).toBeDefined();
+      fireEvent.click(restartButton);
       expect(handleNewGame).toHaveBeenCalledTimes(1);
 
-      fireEvent.click(screen.getByRole("button", { name: /reset all scores/i }));
-      expect(handleResetScores).toHaveBeenCalledTimes(1);
+      // Old static action buttons row should be removed
+      expect(screen.queryByRole("button", { name: /start new game/i })).toBeNull();
+      expect(screen.queryByRole("button", { name: /reset all scores/i })).toBeNull();
     });
   });
 
@@ -393,10 +406,11 @@ describe("UI Components & Primitives", () => {
   });
 
   describe("GameHeader", () => {
-    it("renders header with title and rules button", () => {
+    it("renders header with title and rules button without AI Edition badge", () => {
       render(<GameHeader />);
       expect(screen.getByText("Tic-Tac-Toe")).toBeDefined();
-      expect(screen.getByText("AI Edition")).toBeDefined();
+      expect(screen.queryByText("AI Edition")).toBeNull();
+      expect(screen.queryByText("Modern, tactical & unbeatable AI")).toBeNull();
       expect(screen.getByTestId("rules-button")).toBeDefined();
     });
 
