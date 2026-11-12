@@ -87,7 +87,6 @@ export default function TicTacToePage() {
           onDifficultyChange={setDifficulty}
           onPlayerSymbolChange={setPlayerSymbol}
           onNewGame={resetGame}
-          onResetScores={resetScores}
           isGameInProgress={isGameInProgress}
           disabled={isAiThinking}
         />

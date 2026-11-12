@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Bot, Handshake, RotateCcw, Trash2, Trophy, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Player } from "@/lib/game/types";
@@ -27,8 +27,13 @@ export function GameOverModal({
   onClose,
   className,
 }: GameOverModalProps): React.JSX.Element | null {
+  const playAgainButtonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     if (!isOpen || !winner) return;
+
+    // Focus primary action button when modal opens
+    playAgainButtonRef.current?.focus();
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -51,13 +56,13 @@ export function GameOverModal({
 
   let title = "AI Won 🤖";
   let subtext = "Tough match. Ready for a rematch?";
-  let icon = <Bot className="h-10 w-10 text-rose-500 animate-bounce" />;
+  let icon = <Bot className="h-10 w-10 text-rose-500 animate-bounce motion-reduce:animate-none" />;
   let badgeClass = "bg-rose-500/15 border-rose-500/30 text-rose-600 dark:text-rose-400";
 
   if (isPlayerWinner) {
     title = "You Won! 🎉";
     subtext = "Great match! What's next?";
-    icon = <Trophy className="h-10 w-10 text-emerald-500 animate-bounce" />;
+    icon = <Trophy className="h-10 w-10 text-emerald-500 animate-bounce motion-reduce:animate-none" />;
     badgeClass = "bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400";
   } else if (isDraw) {
     title = "It's a Draw 🤝";
@@ -128,6 +133,7 @@ export function GameOverModal({
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-3 w-full mt-2">
           <button
+            ref={playAgainButtonRef}
             type="button"
             onClick={onPlayAgain}
             className={cn(
