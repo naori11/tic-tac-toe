@@ -70,9 +70,7 @@ export default function TicTacToePage() {
         <GameControls
           difficulty={difficulty}
           playerSymbol={playerSymbol}
-          onSelectDifficulty={setDifficulty}
           onDifficultyChange={setDifficulty}
-          onSelectSymbol={setPlayerSymbol}
           onPlayerSymbolChange={setPlayerSymbol}
           onNewGame={resetGame}
           onResetScores={resetScores}

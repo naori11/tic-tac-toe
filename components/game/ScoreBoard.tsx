@@ -62,7 +62,7 @@ export function ScoreBoard({
           data-testid="player-score-count"
           className="my-1 text-2xl sm:text-3xl font-black tracking-tight tabular-nums"
         >
-          {scores.player}
+          {isMounted ? scores.player : "-"}
         </div>
         <span className="text-[11px] text-muted-foreground">Wins</span>
       </div>
@@ -80,7 +80,7 @@ export function ScoreBoard({
           data-testid="draws-score-count"
           className="my-1 text-2xl sm:text-3xl font-black tracking-tight tabular-nums text-muted-foreground"
         >
-          {scores.draws}
+          {isMounted ? scores.draws : "-"}
         </div>
         <span className="text-[11px] text-muted-foreground">Draws</span>
       </div>
@@ -114,7 +114,7 @@ export function ScoreBoard({
           data-testid="ai-score-count"
           className="my-1 text-2xl sm:text-3xl font-black tracking-tight tabular-nums"
         >
-          {scores.ai}
+          {isMounted ? scores.ai : "-"}
         </div>
         <span className="text-[11px] text-muted-foreground capitalize">
           {difficulty ?? "Wins"}

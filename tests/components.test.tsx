@@ -233,6 +233,22 @@ describe("UI Components & Primitives", () => {
       expect(screen.getByTestId("ai-score-count").textContent).toBe("2");
       expect(screen.getByText("impossible")).toBeDefined();
     });
+
+    it("renders placeholder dashes when not mounted to prevent hydration flash", () => {
+      render(
+        <ScoreBoard
+          scores={{ player: 5, ai: 2, draws: 3 }}
+          playerSymbol="X"
+          aiSymbol="O"
+          difficulty="impossible"
+          isMounted={false}
+        />
+      );
+
+      expect(screen.getByTestId("player-score-count").textContent).toBe("-");
+      expect(screen.getByTestId("draws-score-count").textContent).toBe("-");
+      expect(screen.getByTestId("ai-score-count").textContent).toBe("-");
+    });
   });
 
   describe("GameControls", () => {
@@ -270,6 +286,26 @@ describe("UI Components & Primitives", () => {
       const symbolOButton = screen.getByRole("button", { name: /play as o/i });
       fireEvent.click(symbolOButton);
       expect(handleSymbol).toHaveBeenCalledWith("O");
+    });
+
+    it("disables mark switching when isGameInProgress is true", () => {
+      const handleSymbol = vi.fn();
+      render(
+        <GameControls
+          difficulty="easy"
+          onDifficultyChange={() => {}}
+          playerSymbol="X"
+          onPlayerSymbolChange={handleSymbol}
+          onNewGame={() => {}}
+          onResetScores={() => {}}
+          isGameInProgress={true}
+        />
+      );
+
+      const symbolOButton = screen.getByRole("button", { name: /play as o/i }) as HTMLButtonElement;
+      expect(symbolOButton.disabled).toBe(true);
+      fireEvent.click(symbolOButton);
+      expect(handleSymbol).not.toHaveBeenCalled();
     });
 
     it("triggers onNewGame and onResetScores when clicked", () => {

@@ -7,11 +7,13 @@ import type { Difficulty, Player } from "@/lib/game/types";
 
 export interface GameControlsProps {
   difficulty: Difficulty;
-  onDifficultyChange?: (d: Difficulty) => void;
-  onSelectDifficulty?: (d: Difficulty) => void;
+  onDifficultyChange?: (difficulty: Difficulty) => void;
+  /** @deprecated Use onDifficultyChange */
+  onSelectDifficulty?: (difficulty: Difficulty) => void;
   playerSymbol: Player;
-  onPlayerSymbolChange?: (s: Player) => void;
-  onSelectSymbol?: (s: Player) => void;
+  onPlayerSymbolChange?: (symbol: Player) => void;
+  /** @deprecated Use onPlayerSymbolChange */
+  onSelectSymbol?: (symbol: Player) => void;
   onNewGame: () => void;
   onResetScores: () => void;
   isGameInProgress?: boolean;
@@ -34,19 +36,19 @@ export function GameControls({
   onSelectSymbol,
   onNewGame,
   onResetScores,
-  isGameInProgress,
+  isGameInProgress = false,
   disabled = false,
   className,
 }: GameControlsProps) {
   const handleDifficulty = (d: Difficulty) => {
-    onSelectDifficulty?.(d);
-    onDifficultyChange?.(d);
+    (onDifficultyChange ?? onSelectDifficulty)?.(d);
   };
 
   const handleSymbol = (s: Player) => {
-    onSelectSymbol?.(s);
-    onPlayerSymbolChange?.(s);
+    (onPlayerSymbolChange ?? onSelectSymbol)?.(s);
   };
+
+  const isSymbolDisabled = disabled || isGameInProgress;
   return (
     <div
       data-testid="game-controls"
@@ -97,22 +99,30 @@ export function GameControls({
       <div className="grid grid-cols-2 gap-3 items-center">
         {/* Symbol Selector */}
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">
-            Play As
-          </span>
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Play As
+            </span>
+            {isGameInProgress && (
+              <span className="text-[10px] text-muted-foreground italic">
+                (in match)
+              </span>
+            )}
+          </div>
           <div className="grid grid-cols-2 gap-1 rounded-2xl border border-border/70 bg-secondary/40 p-1">
             <button
               type="button"
               aria-label="Play as X"
               aria-pressed={playerSymbol === "X"}
               onClick={() => handleSymbol("X")}
-              disabled={disabled}
+              disabled={isSymbolDisabled}
+              title={isGameInProgress ? "Reset game to switch marks" : undefined}
               className={cn(
                 "flex items-center justify-center py-2 rounded-xl text-sm font-black transition-all duration-150 cursor-pointer select-none",
                 playerSymbol === "X"
                   ? "bg-emerald-500/15 text-emerald-500 dark:text-emerald-400 border border-emerald-500/40 shadow-xs"
                   : "text-muted-foreground hover:text-foreground hover:bg-card/40",
-                disabled && "opacity-50 cursor-not-allowed"
+                isSymbolDisabled && "opacity-50 cursor-not-allowed"
               )}
             >
               X
@@ -122,13 +132,14 @@ export function GameControls({
               aria-label="Play as O"
               aria-pressed={playerSymbol === "O"}
               onClick={() => handleSymbol("O")}
-              disabled={disabled}
+              disabled={isSymbolDisabled}
+              title={isGameInProgress ? "Reset game to switch marks" : undefined}
               className={cn(
                 "flex items-center justify-center py-2 rounded-xl text-sm font-black transition-all duration-150 cursor-pointer select-none",
                 playerSymbol === "O"
                   ? "bg-rose-500/15 text-rose-500 dark:text-rose-400 border border-rose-500/40 shadow-xs"
                   : "text-muted-foreground hover:text-foreground hover:bg-card/40",
-                disabled && "opacity-50 cursor-not-allowed"
+                isSymbolDisabled && "opacity-50 cursor-not-allowed"
               )}
             >
               O

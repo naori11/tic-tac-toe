@@ -15,7 +15,7 @@ A modern, responsive, and unbeatable Tic-Tac-Toe web application built with **Ne
 
 - **🧠 Three Distinct AI Difficulty Levels:**
   - **Easy:** Completely randomized choices for casual play.
-  - **Medium:** Tactical heuristic AI that takes winning moves and blocks immediate threats, with an intentional blunder rate (40%) to keep it beatable.
+  - **Medium:** Tactical heuristic AI that deterministically takes immediate winning moves, blocks opponent threats, prioritizes the center square, and chooses randomly among remaining cells.
   - **Impossible (Unbeatable):** Recursive Minimax search algorithm with depth penalization. Mathematically impossible to defeat; the best possible outcome is a draw.
 - **❌ / ⭕ Player Mark Selection:**
   - Play as **X** (moves first) or **O** (AI initiates the opening move as X).
@@ -57,29 +57,29 @@ A modern, responsive, and unbeatable Tic-Tac-Toe web application built with **Ne
 ```
 tictactoe/
 ├── app/
-│   ├── favicon.ico
 │   ├── globals.css          # Tailwind base, dark mode theme variables & custom utilities
 │   ├── layout.tsx           # Root HTML layout with ThemeProvider and metadata
 │   └── page.tsx             # Interactive Tic-Tac-Toe main client page
 ├── components/
-│   ├── Board.tsx            # 3x3 interactive board with preview markers & win highlights
-│   ├── Cell.tsx             # Individual button cell with touch targets & ARIA tags
-│   ├── DifficultySelector.tsx # Segmented control for Easy / Medium / Impossible
-│   ├── Header.tsx           # Game title bar with ThemeToggle and MarkSelector
-│   ├── MarkSelector.tsx     # X / O selection toggle
-│   ├── Scoreboard.tsx       # Live stats display (Player, Draws, AI) & reset button
-│   ├── ThemeProvider.tsx    # Next-themes wrapper
-│   └── ThemeToggle.tsx      # Sun / Moon theme toggle button
-├── hooks/
-│   └── useTicTacToe.ts      # Custom hook managing game state, AI timing & localStorage
+│   ├── theme-provider.tsx   # Next-themes wrapper
+│   ├── theme-toggle.tsx     # Sun / Moon theme toggle button
+│   └── game/
+│       ├── Cell.tsx         # Individual button cell with touch targets & ARIA tags
+│       ├── GameBoard.tsx    # 3x3 interactive board with preview markers & win highlights
+│       ├── GameControls.tsx # Difficulty tabs, mark selector, new game & reset actions
+│       ├── GameHeader.tsx   # Game title bar with AI badge, rules modal & ThemeToggle
+│       ├── GameStatus.tsx   # Turn indicator, winner announcer & AI thinking status
+│       └── ScoreBoard.tsx   # Live stats display (Player, Draws, AI) with SSR hydration protection
 ├── lib/
-│   ├── ai.ts                # Easy, Medium, and Minimax AI engine algorithms
-│   ├── confetti.ts          # Confetti trigger utility
-│   ├── engine.ts            # Core rules: checkWinner, isBoardFull, winning line lines
-│   └── utils.ts             # Tailwind class merging utility (clsx + twMerge)
+│   ├── utils.ts             # Tailwind class merging utility (clsx + twMerge)
+│   └── game/
+│       ├── ai.ts            # Easy, Medium, and Minimax AI engine algorithms
+│       ├── engine.ts        # Core rules: checkWinner, isBoardFull, winning line lines
+│       ├── types.ts         # TypeScript types (Board, Player, Difficulty, etc.)
+│       └── useTicTacToe.ts  # Custom hook managing game state, AI timing & localStorage
 └── tests/
     ├── ai.test.ts           # Comprehensive AI heuristics & Minimax invariant tests (26 tests)
-    ├── components.test.tsx  # React component rendering & interaction tests (24 tests)
+    ├── components.test.tsx  # React component rendering & interaction tests (26 tests)
     ├── engine.test.ts       # Board game logic, winning permutations, draws (24 tests)
     ├── page.test.tsx        # Top-level Page integration tests (4 tests)
     ├── useTicTacToe.test.ts # State machine, AI turn scheduling, score updates (16 tests)
@@ -191,7 +191,8 @@ All quality gates pass cleanly:
 
 | Gate | Tool | Status |
 | --- | --- | --- |
-| **Unit & Integration Tests** | Vitest 2.1 | `96 passed (6 test suites)` |
+| **Unit & Integration Tests** | Vitest 2.1 | `98 passed (6 test suites)` |
+| **Code Quality & Lint** | ESLint 8 / Next Core Web Vitals | `0 errors / 0 warnings` |
 | **Type Integrity** | TypeScript 5.7 | `0 errors (tsc --noEmit)` |
 | **Production Build** | Next.js 15 (Turbopack/Webpack) | `Optimized static export` |
 | **Minimax Invariant** | Exhaustive simulation | `0 losses for Impossible AI` |
