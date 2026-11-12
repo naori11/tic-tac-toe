@@ -13,6 +13,8 @@ export interface GameBoardProps {
   disabled?: boolean;
   playerSymbol?: Player;
   winner?: Player | "draw" | null;
+  isAiThinking?: boolean;
+  currentPlayer?: Player;
   className?: string;
 }
 
@@ -23,6 +25,8 @@ export function GameBoard({
   disabled = false,
   playerSymbol = "X",
   winner = null,
+  isAiThinking = false,
+  currentPlayer,
   className,
 }: GameBoardProps) {
   const firedRef = useRef<string | null>(null);
@@ -55,6 +59,12 @@ export function GameBoard({
     return winningLine !== null && winningLine.includes(index);
   };
 
+  const isBoardDisabled =
+    disabled ||
+    isAiThinking ||
+    winner !== null ||
+    (currentPlayer !== undefined && playerSymbol !== undefined && currentPlayer !== playerSymbol);
+
   return (
     <div
       data-testid="game-board"
@@ -73,7 +83,7 @@ export function GameBoard({
             index={index}
             value={cellValue}
             onClick={onCellClick}
-            disabled={disabled || winner !== null}
+            disabled={isBoardDisabled}
             isWinning={isWinningCell(index)}
             previewSymbol={playerSymbol}
           />

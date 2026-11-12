@@ -7,11 +7,14 @@ import type { Difficulty, Player } from "@/lib/game/types";
 
 export interface GameControlsProps {
   difficulty: Difficulty;
-  onDifficultyChange: (d: Difficulty) => void;
+  onDifficultyChange?: (d: Difficulty) => void;
+  onSelectDifficulty?: (d: Difficulty) => void;
   playerSymbol: Player;
-  onPlayerSymbolChange: (s: Player) => void;
+  onPlayerSymbolChange?: (s: Player) => void;
+  onSelectSymbol?: (s: Player) => void;
   onNewGame: () => void;
   onResetScores: () => void;
+  isGameInProgress?: boolean;
   disabled?: boolean;
   className?: string;
 }
@@ -25,13 +28,25 @@ const DIFFICULTIES: { id: Difficulty; label: string; desc: string }[] = [
 export function GameControls({
   difficulty,
   onDifficultyChange,
+  onSelectDifficulty,
   playerSymbol,
   onPlayerSymbolChange,
+  onSelectSymbol,
   onNewGame,
   onResetScores,
+  isGameInProgress,
   disabled = false,
   className,
 }: GameControlsProps) {
+  const handleDifficulty = (d: Difficulty) => {
+    onSelectDifficulty?.(d);
+    onDifficultyChange?.(d);
+  };
+
+  const handleSymbol = (s: Player) => {
+    onSelectSymbol?.(s);
+    onPlayerSymbolChange?.(s);
+  };
   return (
     <div
       data-testid="game-controls"
@@ -61,7 +76,7 @@ export function GameControls({
                 type="button"
                 aria-selected={isSelected}
                 aria-label={`Select ${label} difficulty`}
-                onClick={() => onDifficultyChange(id)}
+                onClick={() => handleDifficulty(id)}
                 disabled={disabled}
                 className={cn(
                   "flex items-center justify-center py-2 px-3 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-150 cursor-pointer select-none",
@@ -90,7 +105,7 @@ export function GameControls({
               type="button"
               aria-label="Play as X"
               aria-pressed={playerSymbol === "X"}
-              onClick={() => onPlayerSymbolChange("X")}
+              onClick={() => handleSymbol("X")}
               disabled={disabled}
               className={cn(
                 "flex items-center justify-center py-2 rounded-xl text-sm font-black transition-all duration-150 cursor-pointer select-none",
@@ -106,7 +121,7 @@ export function GameControls({
               type="button"
               aria-label="Play as O"
               aria-pressed={playerSymbol === "O"}
-              onClick={() => onPlayerSymbolChange("O")}
+              onClick={() => handleSymbol("O")}
               disabled={disabled}
               className={cn(
                 "flex items-center justify-center py-2 rounded-xl text-sm font-black transition-all duration-150 cursor-pointer select-none",

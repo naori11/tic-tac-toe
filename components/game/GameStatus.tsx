@@ -3,13 +3,14 @@
 import React from "react";
 import { Bot, Handshake, Loader2, Sparkles, Trophy, User } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Player } from "@/lib/game/types";
+import type { Player, WinningLine } from "@/lib/game/types";
 
 export interface GameStatusProps {
   winner: Player | "draw" | null;
   isAiThinking: boolean;
   currentPlayer: Player;
   playerSymbol: Player;
+  winningLine?: WinningLine | null;
   className?: string;
 }
 
@@ -18,6 +19,7 @@ export function GameStatus({
   isAiThinking,
   currentPlayer,
   playerSymbol,
+  winningLine,
   className,
 }: GameStatusProps) {
   const isPlayerTurn = currentPlayer === playerSymbol;

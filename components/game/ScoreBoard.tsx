@@ -11,6 +11,8 @@ export interface ScoreBoardProps {
   playerSymbol: Player;
   aiSymbol: Player;
   difficulty?: Difficulty;
+  isMounted?: boolean;
+  onResetScores?: () => void;
   className?: string;
 }
 
@@ -19,6 +21,8 @@ export function ScoreBoard({
   playerSymbol,
   aiSymbol,
   difficulty,
+  isMounted = true,
+  onResetScores,
   className,
 }: ScoreBoardProps) {
   const isPlayerX = playerSymbol === "X";
@@ -45,7 +49,7 @@ export function ScoreBoard({
           <span>You</span>
           <span
             className={cn(
-              "rounded-md px-1 py-0.2 text-[10px] font-bold",
+              "rounded-md px-1 py-0.5 text-[10px] font-bold",
               isPlayerX
                 ? "bg-emerald-500/15 text-emerald-500 dark:text-emerald-400"
                 : "bg-rose-500/15 text-rose-500 dark:text-rose-400"
@@ -97,7 +101,7 @@ export function ScoreBoard({
           <span>AI</span>
           <span
             className={cn(
-              "rounded-md px-1 py-0.2 text-[10px] font-bold",
+              "rounded-md px-1 py-0.5 text-[10px] font-bold",
               !isPlayerX
                 ? "bg-emerald-500/15 text-emerald-500 dark:text-emerald-400"
                 : "bg-rose-500/15 text-rose-500 dark:text-rose-400"
